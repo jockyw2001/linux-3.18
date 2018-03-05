@@ -1,0 +1,1 @@
+cmd_drivers/mstar/mma_heap/mdrv-mma_heap.o := arm-linux-gnueabihf-ld -EL    -r -o drivers/mstar/mma_heap/mdrv-mma_heap.o drivers/mstar/mma_heap/mdrv_mma_heap.o drivers/mstar/mma_heap/region_substract.o 

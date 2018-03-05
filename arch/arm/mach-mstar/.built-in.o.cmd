@@ -1,0 +1,1 @@
+cmd_arch/arm/mach-mstar/built-in.o :=  arm-linux-gnueabihf-ld -EL    -r -o arch/arm/mach-mstar/built-in.o arch/arm/mach-mstar/ms_chip.o arch/arm/mach-mstar/atags_to_fdt.o arch/arm/mach-mstar/infinity2/built-in.o 

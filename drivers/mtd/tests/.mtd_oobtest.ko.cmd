@@ -1,0 +1,1 @@
+cmd_drivers/mtd/tests/mtd_oobtest.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/mtd/tests/mtd_oobtest.ko drivers/mtd/tests/mtd_oobtest.o drivers/mtd/tests/mtd_oobtest.mod.o

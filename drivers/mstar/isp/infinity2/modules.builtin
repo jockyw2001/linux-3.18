@@ -1,0 +1,10 @@
+kernel/drivers/mstar/isp/infinity2/common/isp_sys_api.ko
+kernel/drivers/mstar/isp/infinity2/common/kernel.ko
+kernel/drivers/mstar/isp/infinity2/hal/infinity2/src/hal_isp.ko
+kernel/drivers/mstar/isp/infinity2/hal/infinity2/src/hal_isp_shadow.ko
+kernel/drivers/mstar/isp/infinity2/hal/infinity2/src/isp_interrupt_handler.ko
+kernel/drivers/mstar/isp/infinity2/hal/infinity2/src/hal_iq.ko
+kernel/drivers/mstar/isp/infinity2/hal/infinity2/src/hal_clkpad.ko
+kernel/drivers/mstar/isp/infinity2/drv/src/linux/drv_isp_module.ko
+kernel/drivers/mstar/isp/infinity2/drv/src/common/drv_isp_isr.ko
+kernel/drivers/mstar/isp/infinity2/drv/src/common/drv_isp.ko

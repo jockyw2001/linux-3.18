@@ -1,0 +1,1 @@
+cmd_drivers/mstar/flash_isp/built-in.o :=  arm-linux-gnueabihf-ld -EL    -r -o drivers/mstar/flash_isp/built-in.o drivers/mstar/flash_isp/drvSERFLASH.o drivers/mstar/flash_isp/mtd_serflash.o drivers/mstar/flash_isp/drvDeviceInfo.o drivers/mstar/flash_isp/infinity2/halSERFLASH.o drivers/mstar/flash_isp/part_mxp.o drivers/mstar/flash_isp/mxp_flash.o 

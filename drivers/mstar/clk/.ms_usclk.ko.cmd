@@ -1,0 +1,1 @@
+cmd_drivers/mstar/clk/ms_usclk.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/mstar/clk/ms_usclk.ko drivers/mstar/clk/ms_usclk.o drivers/mstar/clk/ms_usclk.mod.o

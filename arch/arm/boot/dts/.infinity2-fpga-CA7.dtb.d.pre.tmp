@@ -1,0 +1,7 @@
+infinity2-fpga-CA7.o: arch/arm/boot/dts/infinity2-fpga-CA7.dts \
+ arch/arm/boot/dts/infinity2-fpga-CA7.dtsi \
+ arch/arm/boot/dts/../../../../drivers/mstar/include/infinity2/irqs.h \
+ arch/arm/boot/dts/../../../../drivers/mstar/include/infinity2/gpio.h \
+ arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h \
+ arch/arm/boot/dts/include/dt-bindings/interrupt-controller/arm-gic.h \
+ arch/arm/boot/dts/skeleton.dtsi

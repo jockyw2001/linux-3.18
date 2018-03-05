@@ -1,0 +1,517 @@
+# 1 "arch/arm/boot/dts/infinity2-BGA1G.dts"
+# 1 "<command-line>"
+# 1 "arch/arm/boot/dts/infinity2-BGA1G.dts"
+# 16 "arch/arm/boot/dts/infinity2-BGA1G.dts"
+/dts-v1/;
+# 1 "arch/arm/boot/dts/infinity2.dtsi" 1
+# 16 "arch/arm/boot/dts/infinity2.dtsi"
+# 1 "./arch/arm/boot/dts/../../../../drivers/mstar/include/infinity2/irqs.h" 1
+# 17 "arch/arm/boot/dts/infinity2.dtsi" 2
+# 1 "./arch/arm/boot/dts/../../../../drivers/mstar/include/infinity2/gpio.h" 1
+# 18 "arch/arm/boot/dts/infinity2.dtsi" 2
+# 1 "./arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h" 1
+# 19 "arch/arm/boot/dts/infinity2.dtsi" 2
+# 1 "./arch/arm/boot/dts/include/dt-bindings/interrupt-controller/arm-gic.h" 1
+# 20 "arch/arm/boot/dts/infinity2.dtsi" 2
+# 1 "arch/arm/boot/dts/skeleton.dtsi" 1
+
+
+
+
+
+
+/ {
+ #address-cells = <1>;
+ #size-cells = <1>;
+ chosen { };
+ aliases { };
+ memory { device_type = "memory"; reg = <0 0>; };
+};
+# 21 "arch/arm/boot/dts/infinity2.dtsi" 2
+
+
+/ {
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        cpu@0 {
+            device_type = "cpu";
+            compatible = "arm,cortex-a9";
+            reg = <0x0>;
+
+        };
+  cpu@1 {
+            device_type = "cpu";
+            compatible = "arm,cortex-a9";
+            reg = <0x1>;
+
+        };
+
+    };
+
+ clocks {
+  #address-cells = <1>;
+  #size-cells = <0>;
+
+  arm_timer_clk: arm_timer_clk {
+   #clock-cells = <0>;
+   compatible = "fixed-clock";
+   clock-frequency = <500000000>;
+  };
+
+  periph_clk: periph_clk {
+   #clock-cells = <0>;
+   compatible = "fixed-clock";
+   clock-frequency = <50000000>;
+   clock-output-names = "periph";
+  };
+ };
+    xtal: oscillator {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <12000000>;
+    };
+    aliases {
+        console = &uart0;
+        serial0 = &uart0;
+
+
+    };
+
+    soc {
+        compatible = "simple-bus";
+        interrupt-parent = <&gic>;
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+
+        gic: interrupt-controller@16000000 {
+            compatible = "arm,cortex-a9-gic";
+            #interrupt-cells = <3>;
+            #address-cells = <1>;
+            #size-cells = <1>;
+            interrupt-controller;
+            reg = <0x16001000 0x1000>,
+                  <0x16000100 0x100>;
+        };
+
+        ms_pmsleep_intr: interrupt-controller@0 {
+            compatible = "mstar,intrctl-infinity2";
+            #interrupt-cells = <1>;
+            interrupt-parent=<&gic>;
+            interrupt-controller;
+        };
+
+        global_timer {
+            interrupt-parent = <&gic>;
+            compatible = "arm,cortex-a9-global-timer";
+            reg = <0x16000200 0x100>;
+            interrupts = <1 11 4>;
+            clocks = <&arm_timer_clk>;
+        };
+
+   local_timer: local-timer@1e600 {
+            compatible = "arm,cortex-a9-twd-timer";
+            reg = <0x1e600 0x20>;
+            interrupts = <1 13 4>;
+            clocks = <&arm_timer_clk>;
+  };
+
+   twd_watchdog: watchdog@1e620 {
+            compatible = "arm,cortex-a9-twd-wdt";
+            reg = <0x1e620 0x20>;
+            interupts = <1 14 4>;
+  };
+# 127 "arch/arm/boot/dts/infinity2.dtsi"
+        pmu {
+            compatible = "arm,cortex-a9-pmu";
+            interrupts =<0 ((((((0) + 64)) + 64)) + 31) 4>,
+                         <0 ((((((0) + 64)) + 64)) + 22) 4>;
+        };
+# 149 "arch/arm/boot/dts/infinity2.dtsi"
+        uart0: uart0@1F201300 {
+            compatible = "mstar,uart";
+            reg = <0x1F201300 0x100>;
+            interrupts = <0 ((0) + 0) 4>;
+
+            status = "ok";
+        };
+
+        flashisp {
+            compatible = "mtd-flashisp";
+
+            quadread = <0>;
+            status = "ok";
+        };
+
+        vif {
+            compatible = "mstar,vif";
+            status = "ok";
+            reg = <0x1F2A0400 0xC00>,<0x1F2E0A00 0x400>,<0x1F201200 0x200>,<0x1F002000 0x200>,<0x1F001C00 0x200>,<0x1F206600 0x200>, <0x1F204c00 0x200>, <0x1F2A1200 0x3000>, <0x1F284000 0x2000>, <0x1F286400 0x200>, <0x20200000 0x10000>;
+
+        };
+        csi {
+            compatible = "csi";
+
+
+
+            status = "ok";
+        };
+        ispalgo {
+            compatible = "ispalgo";
+            status = "ok";
+        };
+ vip: vip {
+            compatible = "mstar,vip";
+            status = "ok";
+            CMDQ-mode = <1>;
+
+        };
+
+        ethsys: syscon@1fc00000 {
+            #address-cells = <1>;
+            #size-cells = <1>;
+            compatible = "eth,noe-sys";
+            reg = <0x1fc00000 0x200000>;
+            #clock-cells = <1>;
+        };
+
+        eth: ethernet{
+            compatible = "eth,noe";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 53) 4>,
+                         <0 ((((((((0) + 64)) + 64)) + 32)) + 54) 4>,
+                         <0 ((((((((0) + 64)) + 64)) + 32)) + 55) 4>;
+            noe,ethsys = <&ethsys>;
+            #reset-cells = <1>;
+            #address-cells = <1>;
+            #size-cells = <0>;
+            status = "okay";
+        };
+
+        mdip: mdip {
+            compatible = "mstar,dip";
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 29) 4>;
+        };
+
+        sclmgwin: sclmgwin {
+            compatible = "mstar,sclmgwin";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+ sclhvsp1_i2: sclhvsp1_i2 {
+            compatible = "mstar,sclhvsp1_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+        sclhvsp2_i2: sclhvsp2_i2 {
+            compatible = "mstar,sclhvsp2_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+        sclhvsp3_i2: sclhvsp3_i2 {
+            compatible = "mstar,sclhvsp3_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+        sclhvsp4_i2: sclhvsp4_i2 {
+            compatible = "mstar,sclhvsp4_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+  scldma1_i2: scldma1_i2 {
+            compatible = "mstar,scldma1_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+        scldma2_i2: scldma2_i2 {
+            compatible = "mstar,scldma2_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+        scldma3_i2: scldma3_i2 {
+            compatible = "mstar,scldma3_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+        scldma4_i2: scldma4_i2 {
+            compatible = "mstar,scldma4_i2";
+
+
+
+
+            status = "ok";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 59) 4>;
+        };
+
+  sar: sar {
+            compatible = "mstar,infinity-sar";
+            reg = <0x1F002800 0x200>;
+        };
+
+        pwm {
+            compatible = "mstar,infinity2-pwm";
+            reg = <0x1F003400 0x400>;
+
+            npwm = <8>;
+            pad-ctrl = <152 153 0xFF 0xFF 121 0xFF 0xFF 124>;
+        };
+
+        rtc {
+            compatible = "mstar,infinity-rtc";
+            reg = <0x1F002400 0x40>;
+            interrupts=<0 ((0) + 23) 4>;
+
+        };
+
+        spi0: spi@0 {
+            compatible = "mstar_spi";
+         spi-num = <0>;
+         pad-mode = <1>;
+         reg = <0x1F202600 0x200>,<0x1F203c00 0x200>,<0x1F201600 0x200>;
+            interrupts = <0 ((0) + 12) 4>;
+        };
+
+        spi1: spi@1 {
+            compatible = "mstar_spi";
+         spi-num = <1>;
+         pad-mode = <1>;
+         reg = <0x1F201800 0x200>,<0x1F203c00 0x200>,<0x1F201600 0x200>;
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 12) 4>;
+        };
+
+        i2c0@0{
+            compatible = "mstar,i2c";
+            status = "ok";
+            reg = <0x1F226800 0x200>,<0x1F204c00 0x200>,<0x1F206600 0x200>;
+
+            i2c-group = <0>;
+            i2c-dma = <0>;
+
+
+
+            i2c-padmux = <1>;
+        };
+
+        i2c1@1{
+            compatible = "mstar,i2c";
+            status = "ok";
+            reg = <0x1F226A00 0x200>,<0x1F204c00 0x200>,<0x1F206600 0x200>;
+
+            i2c-group = <1>;
+            i2c-dma = <1>;
+
+
+
+            i2c-padmux = <1>;
+
+
+
+
+
+        };
+
+        i2c2@2{
+            compatible = "mstar,i2c";
+
+            reg = <0x1F226C00 0x200>,<0x1F204c00 0x200>,<0x1F206600 0x200>;
+
+            i2c-group = <2>;
+            i2c-dma = <1>;
+
+
+
+            i2c-padmux = <1>;
+        };
+
+        i2c3@3{
+            compatible = "mstar,i2c";
+
+            reg = <0x1F227400 0x200>,<0x1F204c00 0x200>,<0x1F201400 0x200>;
+                #address-cells = <1>;
+                #size-cells = <0>;
+
+            i2c-group = <3>;
+            i2c-dma = <1>;
+
+
+
+            i2c-padmux = <1>;
+        };
+
+        sdmmc {
+            compatible = "mstar,sdmmc";
+
+        slotnum = <1>;
+        revcdz = <0>;
+
+        slot-ip-orders = <0>,<1>,<2>;
+        slot-pad-orders = <0>,<1>,<2>;
+        slot-max-clks = <48000000>,<48000000>,<48000000>;
+        slot-intcdzs = <0>,<1>,<1>;
+        slot-fakecdzs = <1>,<0>,<0>;
+        slot-pwr-gpios = <19>,<0>,<0>;
+
+
+
+
+        };
+
+       mfe0: mfe0 {
+            compatible = "mstar,mfe0", "mstar,mfe";
+            reg = <0x1F222000 0x300>;
+            interrupts=<0 ((0) + 26) 4>;
+
+
+            status = "ok";
+        };
+
+        mfe1: mfe1 {
+            compatible = "mstar,mfe1";
+            reg = <0x1F2E7200 0x300>;
+            interrupts=<0 ((((((((0) + 64)) + 64)) + 32)) + 35) 4>;
+
+
+            status = "ok";
+        };
+
+        mhe0: mhe0 {
+            compatible = "mstar,mhe0", "mstar,mhe";
+            reg = <0x1F2E3A00 0x100>,<0x1F2E3C00 0x100>,<0x1F2E3E00 0x100>,<0x1F2E1200 0x100>;
+            interrupts=<0 ((((((((0) + 64)) + 64)) + 32)) + 34) 4>;
+
+
+            status = "ok";
+        };
+
+        mhe1: mhe1 {
+            compatible = "mstar,mhe1";
+            reg = <0x1F2E7800 0x100>,<0x1F2E7A00 0x100>,<0x1F2E7C00 0x100>,<0x1F2E7E00 0x100>;
+            interrupts=<0 ((((((((0) + 64)) + 64)) + 32)) + 36) 4>;
+
+
+            status = "ok";
+        };
+
+        jpe0: jpe0 {
+            compatible = "mstar,cedric-jpe";
+            reg = <0x1F202A00 0x100>;
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 41) 4>;
+
+
+
+            status = "ok";
+        };
+
+        sound {
+            compatible = "mstar,audio";
+
+            interrupts=<0 ((((((((0) + 64)) + 64)) + 32)) + 48) 4>;
+
+
+
+        };
+        cpufreq {
+            compatible = "mstar,infinity-cpufreq";
+
+            vid1-gpio = <16>;
+        };
+
+        spinandflash {
+            compatible = "ms-spinand";
+
+            status = "ok";
+        };
+
+  gpio:gpio{
+            compatible = "mstar,gpio";
+        };
+
+        watchdog: watchdog {
+            compatible = "mstar,infinity-wdt";
+            reg = <0x1F006000 0x40>;
+        };
+# 563 "arch/arm/boot/dts/infinity2.dtsi"
+        emac {
+            compatible = "mstar-emac";
+            interrupts = <0 ((((((((0) + 64)) + 64)) + 32)) + 30) 4>;
+
+
+
+        };
+# 678 "arch/arm/boot/dts/infinity2.dtsi"
+    };
+};
+# 18 "arch/arm/boot/dts/infinity2-BGA1G.dts" 2
+
+/ {
+    model = "INFINITY2 MSC005A-S01A";
+    compatible = "mstar,infinity2";
+
+    memory {
+        reg = <0x20000000 0x3DC00000>;
+    };
+
+    chosen {
+        bootargs = "console=ttyS0,115200n8r androidboot.console=ttyS0 root=/dev/mtdblock2 init=/linuxrc reserve_mem=16M LX_MEM=0x3DC00000 EMAC_MEM=0x100000 mma_heap=mma_heap_name0,miu=0,sz=0x3200000";
+
+
+    };
+# 42 "arch/arm/boot/dts/infinity2-BGA1G.dts"
+    reserved-memory {
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+# 60 "arch/arm/boot/dts/infinity2-BGA1G.dts"
+        cma0 {
+            compatible = "shared-dma-pool";
+            reusable;
+            size = <0x6400000>;
+            alignment = <0x1000>;
+            linux,cma-default;
+        };
+
+    };
+# 85 "arch/arm/boot/dts/infinity2-BGA1G.dts"
+};

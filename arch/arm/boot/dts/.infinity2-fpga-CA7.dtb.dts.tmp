@@ -1,0 +1,182 @@
+# 1 "arch/arm/boot/dts/infinity2-fpga-CA7.dts"
+# 1 "<command-line>"
+# 1 "arch/arm/boot/dts/infinity2-fpga-CA7.dts"
+# 17 "arch/arm/boot/dts/infinity2-fpga-CA7.dts"
+/dts-v1/;
+# 1 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi" 1
+# 16 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi"
+# 1 "./arch/arm/boot/dts/../../../../drivers/mstar/include/infinity2/irqs.h" 1
+# 17 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi" 2
+# 1 "./arch/arm/boot/dts/../../../../drivers/mstar/include/infinity2/gpio.h" 1
+# 18 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi" 2
+# 1 "./arch/arm/boot/dts/include/dt-bindings/interrupt-controller/irq.h" 1
+# 19 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi" 2
+# 1 "./arch/arm/boot/dts/include/dt-bindings/interrupt-controller/arm-gic.h" 1
+# 20 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi" 2
+# 1 "arch/arm/boot/dts/skeleton.dtsi" 1
+
+
+
+
+
+
+/ {
+ #address-cells = <1>;
+ #size-cells = <1>;
+ chosen { };
+ aliases { };
+ memory { device_type = "memory"; reg = <0 0>; };
+};
+# 21 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi" 2
+
+
+/ {
+    cpus {
+        #address-cells = <1>;
+        #size-cells = <0>;
+
+        cpu@0 {
+            device_type = "cpu";
+            compatible = "arm,cortex-a7";
+
+            reg = <0x0>;
+            clocks = <&xtal>;
+        };
+
+    };
+
+    xtal: oscillator {
+        compatible = "fixed-clock";
+        #clock-cells = <0>;
+        clock-frequency = <12000000>;
+    };
+
+    aliases {
+        console = &uart0;
+        serial0 = &uart0;
+    };
+
+    soc {
+        compatible = "simple-bus";
+        interrupt-parent = <&gic>;
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges = <0 0 0xFFFFFFFF>;
+
+
+        gic: interrupt-controller@16000000 {
+            compatible = "arm,cortex-a7-gic";
+            #interrupt-cells = <3>;
+            #address-cells = <1>;
+            #size-cells = <1>;
+            interrupt-controller;
+            reg = <0x16001000 0x1000>,
+                  <0x16002000 0x1000>;
+        };
+
+        ms_pmsleep_intr: interrupt-controller@0 {
+            compatible = "mstar,intrctl-infinity2";
+            #interrupt-cells = <1>;
+            interrupt-parent=<&gic>;
+            interrupt-controller;
+        };
+
+        arch_timer {
+            compatible = "arm,cortex-a7-timer", "arm,armv7-timer";
+            interrupts = <1 13 ((((1 << (2)) - 1) << 8) | 8)>,
+                         <1 14 ((((1 << (2)) - 1) << 8) | 8)>,
+                         <1 11 ((((1 << (2)) - 1) << 8) | 8)>,
+                         <1 10 ((((1 << (2)) - 1) << 8) | 8)>;
+            clock-frequency = <24000000>;
+        };
+
+        pmu {
+            compatible = "arm,cortex-a7-pmu";
+            interrupts = <0 10 4>,
+                         <0 16 4>,
+                         <0 22 4>,
+                         <0 28 4>;
+        };
+  clks: clocks{
+            #address-cells = <1>;
+            #size-cells = <1>;
+            ranges;
+        };
+# 117 "arch/arm/boot/dts/infinity2-fpga-CA7.dtsi"
+        uart0: uart@1F201300 {
+            compatible = "mstar,uart";
+            reg = <0x1F201300 0x100>;
+            interrupts= <0 ((0) + 0) 4>;
+            status = "ok";
+            clocks = <&xtal>;
+        };
+
+
+        flashisp {
+            compatible = "mtd-flashisp";
+
+            quadread = <0>;
+            status = "disabled";
+        };
+
+
+
+
+    };
+};
+# 19 "arch/arm/boot/dts/infinity2-fpga-CA7.dts" 2
+
+/ {
+    model = "INFINITY2 FPGA";
+    compatible = "mstar,infinity2";
+
+    memory {
+        reg = <0x20000000 0x07000000>;
+    };
+
+    chosen {
+        bootargs = "console=ttyS0,38400n8r androidboot.console=ttyS0 root=/dev/ram rootwait";
+        linux,initrd-start = <0x20FE0000>;
+        linux,initrd-end = <0x21000000>;
+    };
+
+    sysp:rammtd@0 {
+        compatible = "mtd-ram";
+        reg= <0x27000000 0x00600000>;
+        bank-width = <1>;
+        linux,mtd-name = "SYSTEM";
+    };
+
+
+    datap:rammtd@1 {
+        compatible = "mtd-ram";
+        reg= <0x27600000 0x00100000>;
+        bank-width = <1>;
+        linux,mtd-name = "DATA";
+        erase-size = <0x10000>;
+    };
+
+    extp:rammtd@2 {
+        compatible = "mtd-ram";
+        reg= <0x28000000 0x00500000>;
+        bank-width = <1>;
+        linux,mtd-name = "EXT";
+        erase-size = <0x10000>;
+    };
+
+
+    reserved-memory {
+        #address-cells = <1>;
+        #size-cells = <1>;
+        ranges;
+
+        cma0 {
+            compatible = "shared-dma-pool";
+            reusable;
+            size = <0x02000000>;
+            alignment = <0x1000>;
+            linux,cma-default;
+        };
+    };
+
+};

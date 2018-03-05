@@ -1,0 +1,1 @@
+cmd_drivers/mstar/spinand/kdrv_spinand.o := arm-linux-gnueabihf-ld -EL    -r -o drivers/mstar/spinand/kdrv_spinand.o drivers/mstar/spinand/drv/mdrv_spinand.o drivers/mstar/spinand/drv/mdrv_spinand_hal.o drivers/mstar/spinand/hal/mhal_spinand.o 

@@ -1,0 +1,2 @@
+kernel/drivers/mstar/i2c/ms_iic.ko
+kernel/drivers/mstar/i2c/infinity2/mhal_iic.ko

@@ -1,0 +1,3 @@
+kernel/drivers/mstar/gpio/mdrv_gpio.ko
+kernel/drivers/mstar/gpio/mdrv_gpio_io.ko
+kernel/drivers/mstar/gpio/infinity2/mhal_gpio.ko

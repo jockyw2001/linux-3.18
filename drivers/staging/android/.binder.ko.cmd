@@ -1,0 +1,1 @@
+cmd_drivers/staging/android/binder.ko := arm-linux-gnueabihf-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o drivers/staging/android/binder.ko drivers/staging/android/binder.o drivers/staging/android/binder.mod.o
